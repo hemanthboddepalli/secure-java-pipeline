@@ -1,0 +1,8 @@
+.git
+.github
+.idea
+target
+charts
+README.md
+trivy-reports
+

@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/OWNER/secure-java-pipeline
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8080
+
+inspection:
+  passMax: 5
+  reviewMax: 20
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 384Mi
+

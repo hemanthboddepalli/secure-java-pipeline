@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: wafer-inspection-service
+
+inspection:
+  thresholds:
+    pass-max: ${INSPECTION_PASS_MAX:5}
+    review-max: ${INSPECTION_REVIEW_MAX:20}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Secure Java delivery pipeline demo
+
+server:
+  shutdown: graceful
+
