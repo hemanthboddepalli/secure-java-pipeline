@@ -21,7 +21,7 @@
         <java.version>17</java.version>
         <commons-configuration.version>2.10.1</commons-configuration.version>
         <!-- Intentionally vulnerable in the first commit for the SCA exercise. -->
-        <commons-text.version>1.9</commons-text.version>
+        <commons-text.version>1.15.0</commons-text.version>
         <dependency-check.version>12.2.0</dependency-check.version>
         <cyclonedx.version>2.9.1</cyclonedx.version>
         <spotbugs.version>4.9.8.2</spotbugs.version>
