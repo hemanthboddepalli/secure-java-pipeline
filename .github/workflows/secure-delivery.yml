@@ -33,7 +33,7 @@ jobs:
       - run: helm lint charts/wafer-inspection && helm template test charts/wafer-inspection >/dev/null
       - name: Upload build outputs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: java-build-${{ github.sha }}
           path: |
@@ -59,7 +59,7 @@ jobs:
         run: ./mvnw -B -ntp org.owasp:dependency-check-maven:check
       - name: Upload SCA reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dependency-check-${{ github.sha }}
           path: |
@@ -108,7 +108,7 @@ jobs:
           exit-code: "1"
       - name: Upload container evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: container-security-${{ github.sha }}
           path: |
