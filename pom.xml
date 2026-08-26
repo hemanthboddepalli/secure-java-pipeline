@@ -21,7 +21,7 @@
         <java.version>17</java.version>
         <commons-configuration.version>2.15.1</commons-configuration.version>
         <commons-text.version>1.15.0</commons-text.version>
-        <dependency-check.version>12.2.0</dependency-check.version>
+        <dependency-check.version>13.0.0</dependency-check.version>
         <cyclonedx.version>2.9.1</cyclonedx.version>
         <spotbugs.version>4.9.8.2</spotbugs.version>
         <findsecbugs.version>1.14.0</findsecbugs.version>
