@@ -18,6 +18,9 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -50,6 +53,12 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+          volumeMounts:
+            - name: temp
+              mountPath: /tmp
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-
+      volumes:
+        - name: temp
+          emptyDir:
+            sizeLimit: 64Mi

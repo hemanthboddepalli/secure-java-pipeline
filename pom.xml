@@ -19,15 +19,25 @@
 
     <properties>
         <java.version>17</java.version>
-        <commons-configuration.version>2.10.1</commons-configuration.version>
-        <!-- Intentionally vulnerable in the first commit for the SCA exercise. -->
-        <commons-text.version>1.9</commons-text.version>
+        <commons-configuration.version>2.15.1</commons-configuration.version>
+        <commons-text.version>1.15.0</commons-text.version>
         <dependency-check.version>12.2.0</dependency-check.version>
         <cyclonedx.version>2.9.1</cyclonedx.version>
         <spotbugs.version>4.9.8.2</spotbugs.version>
         <findsecbugs.version>1.14.0</findsecbugs.version>
         <jacoco.version>0.8.13</jacoco.version>
+        <maven-enforcer.version>3.6.2</maven-enforcer.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -50,7 +60,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>${commons-text.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,6 +70,24 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-build-and-dependency-policy</id>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion><version>[17,18)</version></requireJavaVersion>
+                                <requireMavenVersion><version>[3.9.11,)</version></requireMavenVersion>
+                                <dependencyConvergence/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -142,7 +169,7 @@
                     <failBuildOnCVSS>7</failBuildOnCVSS>
                     <failOnError>true</failOnError>
                     <nvdApiKeyEnvironmentVariable>NVD_API_KEY</nvdApiKeyEnvironmentVariable>
-                    <dataDirectory>${project.build.directory}/dependency-check-data</dataDirectory>
+                    <dataDirectory>${user.home}/.m2/repository/org/owasp/dependency-check-data</dataDirectory>
                 </configuration>
             </plugin>
             <plugin>

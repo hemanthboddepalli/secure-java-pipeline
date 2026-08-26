@@ -27,6 +27,7 @@ The default policy is PASS for 0-5 defects, REVIEW for 6-20, and REJECT above 20
 ```bash
 ./mvnw -B -ntp verify
 ./mvnw -B -ntp dependency:tree -Dincludes=org.apache.commons:commons-text
+trivy fs --scanners vuln --severity HIGH,CRITICAL --exit-code 1 .
 ./mvnw -B -ntp org.owasp:dependency-check-maven:check
 
 docker build -t wafer-inspection:local .
@@ -35,11 +36,19 @@ trivy image --format cyclonedx --output image-sbom.cdx.json wafer-inspection:loc
 trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 wafer-inspection:local
 ```
 
-`NVD_API_KEY` is optional but strongly recommended because OWASP Dependency-Check downloads substantially faster with one.
+Trivy filesystem scanning is the always-on dependency gate. OWASP Dependency-Check also runs in CI when the `NVD_API_KEY` repository secret is configured; without a key, importing the complete NVD feed can take over an hour and is deliberately skipped rather than making every delivery nondeterministic.
 
 ## Vulnerability-to-remediation story
 
-The first commit deliberately pins `commons-text:1.9`. Maven selects that direct dependency over the newer transitive version from Commons Configuration. OWASP Dependency-Check detects CVE-2022-42889 and stops the pipeline before a container can be published. The next commit upgrades and converges the graph; its hashes and GitHub run links are recorded after both runs complete.
+The vulnerable baseline is commit `1a03836`: it deliberately pins `commons-text:1.9`. Maven selects that direct dependency over `1.11.0` from Commons Configuration:
+
+```text
++- commons-configuration2:2.10.1
+|  \- (commons-text:1.11.0 - omitted for conflict with 1.9)
+\- commons-text:1.9
+```
+
+Trivy—and OWASP Dependency-Check when an NVD key is configured—detects CVE-2022-42889 and stops the pipeline before a container can be published. The remediation commit upgrades Commons Configuration to 2.15.1, manages Commons Text at 1.15.0, and enables Maven Enforcer's dependency-convergence rule. Use `git show vulnerable-demo` and `git show remediated-demo` to compare the two states.
 
 ## Local Kubernetes with Helm
 
@@ -62,4 +71,3 @@ Upgrade or roll back with `helm upgrade wafer charts/wafer-inspection ...` and `
 ## GitHub setup
 
 The workflow needs only the repository `GITHUB_TOKEN`; add `NVD_API_KEY` as an Actions secret when available. Pull requests build and scan without publishing. Passing pushes to `main` publish the exact scanned image as `sha-<commit>` and `latest` under `ghcr.io/<owner>/secure-java-pipeline` and attach provenance.
-
