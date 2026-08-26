@@ -29,7 +29,7 @@ jobs:
       - name: Compile, test, coverage, SAST, and dependency SBOM
         run: ./mvnw -B -ntp verify
       - name: Validate Helm chart
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
       - run: helm lint charts/wafer-inspection && helm template test charts/wafer-inspection >/dev/null
       - name: Upload build outputs
         if: always()
