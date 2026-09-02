@@ -7,7 +7,7 @@ COPY src/ src/
 COPY docker/HealthCheck.java /healthcheck/HealthCheck.java
 RUN ./mvnw -B -ntp package -DskipTests && javac -d /healthcheck /healthcheck/HealthCheck.java
 
-FROM gcr.io/distroless/java17-debian13:nonroot@sha256:2dcb2b21efab7e9250945985e0b0aab99ec7835db96a7bbc68edd1a0ad2e51ff
+FROM gcr.io/distroless/java17-debian13:nonroot@sha256:cc22e72aa8540b9b87f056a30319c62fa6ebd98d6463f364b162ef9723e1e695
 ARG VCS_URL="local"
 ARG VCS_REF="unknown"
 LABEL org.opencontainers.image.title="wafer-inspection-service" \
